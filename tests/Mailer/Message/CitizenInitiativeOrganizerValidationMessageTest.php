@@ -20,8 +20,6 @@ class CitizenInitiativeOrganizerValidationMessageTest extends AbstractEventMessa
         );
 
         $this->assertInstanceOf(CitizenInitiativeOrganizerValidationMessage::class, $message);
-        $this->assertSame('196469', $message->getTemplate());
-        $this->assertSame('Validation de votre initiative citoyenne', $message->getSubject());
         $this->assertCount(4, $message->getVars());
         $this->assertSame(
             [

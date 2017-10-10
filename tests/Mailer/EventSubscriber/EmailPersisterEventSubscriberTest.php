@@ -34,7 +34,7 @@ class EmailPersisterEventSubscriberTest extends TestCase
 
         $this->subscriber->onMailerDeliveryMessage(new MailerEvent(
             $message = CommitteeMessageNotificationMessage::create($adherents, $item),
-            DummyEmailTemplate::createWithMessage($message, 'noreply@en-marche.fr')
+            DummyEmailTemplate::createWithMessage($message, 'committee_message_notification', 'noreply@en-marche.fr')
         ));
     }
 
@@ -45,7 +45,7 @@ class EmailPersisterEventSubscriberTest extends TestCase
 
         $this->subscriber->onMailerDeliverySuccess(new MailerEvent(
             $message = DummyMessage::create(),
-            DummyEmailTemplate::createWithMessage($message, 'noreply@en-marche.fr')
+            DummyEmailTemplate::createWithMessage($message, 'dummy_message', 'noreply@en-marche.fr')
         ));
     }
 
@@ -60,7 +60,7 @@ class EmailPersisterEventSubscriberTest extends TestCase
 EOF;
 
         $message = DummyMessage::create();
-        $email = DummyEmailTemplate::createWithMessage($message, 'noreply@en-marche.fr');
+        $email = DummyEmailTemplate::createWithMessage($message, 'dummy_message', 'noreply@en-marche.fr');
         $email->delivered($responsePayload, $email->getHttpRequestPayload());
 
         $this->repository->expects($this->once())->method('findOneByUuid')->willReturn(null);
@@ -83,7 +83,7 @@ EOF;
 }
 EOF;
 
-        $email = DummyEmailTemplate::createWithMessage($message, 'noreply@en-marche.fr');
+        $email = DummyEmailTemplate::createWithMessage($message, 'dummy_message', 'noreply@en-marche.fr');
         $email->delivered($responsePayload, $requestPayload = $email->getHttpRequestPayload());
 
         $this->repository

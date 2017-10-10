@@ -20,8 +20,6 @@ class CitizenInitiativeCreationConfirmationMessageTest extends AbstractEventMess
         $message = CitizenInitiativeCreationConfirmationMessage::create($event);
 
         $this->assertInstanceOf(CitizenInitiativeCreationConfirmationMessage::class, $message);
-        $this->assertSame('196483', $message->getTemplate());
-        $this->assertSame('Votre initiative En Marche en attente de validation', $message->getSubject());
         $this->assertCount(1, $message->getVars());
         $this->assertSame(
             [

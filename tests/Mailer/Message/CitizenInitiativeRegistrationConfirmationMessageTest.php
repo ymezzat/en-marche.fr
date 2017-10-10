@@ -26,10 +26,8 @@ class CitizenInitiativeRegistrationConfirmationMessageTest extends AbstractEvent
 
         $this->assertInstanceOf(CitizenInitiativeRegistrationConfirmationMessage::class, $message);
         $this->assertInstanceOf(UuidInterface::class, $message->getUuid());
-        $this->assertSame('212744', $message->getTemplate());
         $this->assertSame('john@bar.com', $message->getRecipient(0)->getEmailAddress());
         $this->assertSame('John', $message->getRecipient(0)->getFullName());
-        $this->assertSame('Confirmation de participation à une initiative citoyenne En Marche !', $message->getSubject());
         $this->assertSame(
             [
                 'IC_name' => 'Grand Meeting de Paris',

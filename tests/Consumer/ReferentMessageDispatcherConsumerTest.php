@@ -136,7 +136,7 @@ class ReferentMessageDispatcherConsumerTest extends TestCase
 
         $this->validator->expects($this->once())->method('validate')->willReturn($collections);
 
-        $miljetReferentMessage = new Message($uuidInterface, 'a', 'b', 'c', 'd');
+        $miljetReferentMessage = new Message($uuidInterface, 'a', 'b');
         $referentMessageDispatcherConsumer = $this
             ->getMockBuilder(ReferentMessageDispatcherConsumer::class)
             ->setConstructorArgs([$this->validator, $this->entityManager])

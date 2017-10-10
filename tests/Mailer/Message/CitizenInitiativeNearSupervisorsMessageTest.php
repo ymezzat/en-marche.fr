@@ -28,9 +28,7 @@ class CitizenInitiativeNearSupervisorsMessageTest extends AbstractEventMessageTe
         );
 
         $this->assertInstanceOf(CitizenInitiativeNearSupervisorsMessage::class, $message);
-        $this->assertSame('196517', $message->getTemplate());
         $this->assertCount(4, $message->getRecipients());
-        $this->assertSame('27 décembre - 10h30 : Nouvelle initiative citoyenne : Initiative citoyenne à Lyon', $message->getSubject());
         $this->assertCount(7, $message->getVars());
         $this->assertSame(
             [
