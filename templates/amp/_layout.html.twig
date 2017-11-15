@@ -29,104 +29,104 @@
     </style>
 </head>
 <body>
-    {% block header %}
-        <header>
-            <!--  Header / Navigation Desktop -->
-            <nav class="l__wrapper l__row l__row--h-stretch space--20-0 l__hide--on-small-laptop">
-                <ul class="list__links list__links--row list__links--row-top list__links--no-decor list__links--nav">
-                    <li><h1><a href="{{ path('homepage') }}">En Marche !</a></h1></li>
-                    <li><a class="text--medium-small" href="{{ path('page_le_mouvement') }}">Le Mouvement</a></li>
-                    <li><a class="text--medium-small" href="https://legislatives.en-marche.fr/">Législatives</a></li>
-                    <li><a class="text--medium-small" href="{{ path('page_emmanuel_macron') }}">Emmanuel Macron</a></li>
-                    <li><a class="text--medium-small" href="{{ path('program_index') }}">Programme</a></li>
-                    <li><a class="text--medium-small" href="{{ path('articles_list', {'category': 'tout'}) }}">Actualités</a></li>
-                </ul>
-                <div class="l__row">
-                    <a href="{{ path('donation_index') }}" class="btn btn--primary b__nudge--right">Je donne</a>
-                    <div class="nav__user">
-                        <a href="{{ path('app_adherent_login') }}" class="icon--with-text text--medium-small nav__user__name">
+{% block header %}
+    <header>
+        <!--  Header / Navigation Desktop -->
+        <nav class="l__wrapper l__row l__row--h-stretch space--20-0 l__hide--on-small-laptop">
+            <ul class="list__links list__links--row list__links--row-top list__links--no-decor list__links--nav">
+                <li><h1><a href="{{ path('homepage') }}">En Marche !</a></h1></li>
+                <li><a class="text--medium-small" href="{{ path('app_static_page', { slug: 'le-mouvement-nos-valeurs' }) }}">Le Mouvement</a></li>
+                <li><a class="text--medium-small" href="https://legislatives.en-marche.fr/">Législatives</a></li>
+                <li><a class="text--medium-small" href="{{ path('app_static_page', { slug: 'emmanuel-macron' }) }}">Emmanuel Macron</a></li>
+                <li><a class="text--medium-small" href="{{ path('program_index') }}">Programme</a></li>
+                <li><a class="text--medium-small" href="{{ path('articles_list', {'category': 'tout'}) }}">Actualités</a></li>
+            </ul>
+            <div class="l__row">
+                <a href="{{ path('donation_index') }}" class="btn btn--primary b__nudge--right">Je donne</a>
+                <div class="nav__user">
+                    <a href="{{ path('app_adherent_login') }}" class="icon--with-text text--medium-small nav__user__name">
+                        {{ include('components/user.html.twig') }}
+                        Aller sur la plateforme
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!--  Header / Navigation Mobile-->
+        <nav class="l__wrapper l__hide--above-small-laptop space--20-0">
+            <ul class="list__links list__links--row list__links--nav l__row--h-stretch">
+                <li><h1><a href="{{ path('homepage') }}" class="link--no-decor">En Marche !</a></h1></li>
+                <a href="{{ path('donation_index') }}" class="btn btn--primary b__nudge--right-larger">
+                    Je donne
+                </a>
+            </ul>
+            <div class="nav__mobile">
+                <input type="checkbox" id="nav-menu">
+                <label for="nav-menu">Menu de navigation</label>
+                <div class="nav__mobile--menu">
+                    <div class="l__row l__row--h-stretch">
+                        <a href="{{ path('homepage') }}" class="icon--with-text text--medium-small">
                             {{ include('components/user.html.twig') }}
                             Aller sur la plateforme
                         </a>
                     </div>
-                </div>
-            </nav>
-
-            <!--  Header / Navigation Mobile-->
-            <nav class="l__wrapper l__hide--above-small-laptop space--20-0">
-                <ul class="list__links list__links--row list__links--nav l__row--h-stretch">
-                    <li><h1><a href="{{ path('homepage') }}" class="link--no-decor">En Marche !</a></h1></li>
-                    <a href="{{ path('donation_index') }}" class="btn btn--primary b__nudge--right-larger">
-                        Je donne
-                    </a>
-                </ul>
-                <div class="nav__mobile">
-                    <input type="checkbox" id="nav-menu">
-                    <label for="nav-menu">Menu de navigation</label>
-                    <div class="nav__mobile--menu">
-                        <div class="l__row l__row--h-stretch">
-                            <a href="{{ path('homepage') }}" class="icon--with-text text--medium-small">
-                                {{ include('components/user.html.twig') }}
-                                Aller sur la plateforme
+                    <hr />
+                    <ul class="list__links list__links--col list__links--no-decor list__links--nav">
+                        <li><a class="text--medium-small" href="{{ path('app_static_page', { slug: 'le-mouvement-nos-valeurs' }) }}">Le Mouvement</a></li>
+                        <li><a class="text--medium-small" href="{{ path('program_index') }}">Programme</a></li>
+                        <li><a class="text--medium-small" href="{{ path('app_') }}">Emmanuel Macron</a></li>
+                        <li><a class="text--medium-small" href="{{ path('articles_list', {'category': 'tout'}) }}">Actualités</a></li>
+                    </ul>
+                    <hr>
+                    <ul class="list__links list__links--row b__nudge--bottom-small">
+                        <li class="head">Suivez La République En Marche !</li>
+                    </ul>
+                    <ul class="list__links list__links--row list__links--no-decor list__links--svgs l__row--wrap">
+                        <li>
+                            <a href="https://www.facebook.com/EnMarche" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-facebook-square"></i>
                             </a>
-                        </div>
-                        <hr />
-                        <ul class="list__links list__links--col list__links--no-decor list__links--nav">
-                            <li><a class="text--medium-small" href="{{ path('page_le_mouvement') }}">Le Mouvement</a></li>
-                            <li><a class="text--medium-small" href="{{ path('program_index') }}">Programme</a></li>
-                            <li><a class="text--medium-small" href="{{ path('page_emmanuel_macron') }}">Emmanuel Macron</a></li>
-                            <li><a class="text--medium-small" href="{{ path('articles_list', {'category': 'tout'}) }}">Actualités</a></li>
-                        </ul>
-                        <hr>
-                        <ul class="list__links list__links--row b__nudge--bottom-small">
-                            <li class="head">Suivez La République En Marche !</li>
-                        </ul>
-                        <ul class="list__links list__links--row list__links--no-decor list__links--svgs l__row--wrap">
-                            <li>
-                                <a href="https://www.facebook.com/EnMarche" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-facebook-square"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://twitter.com/enmarchefr" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.instagram.com/enmarchefr/" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-instagram"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.linkedin.com/company/en-marche" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-linkedin-square"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://medium.com/@enmarchefr" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-medium"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="https://www.youtube.com/channel/UCJw8np695wqWOaKVhFjkRyg" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-youtube-square"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="http://www.snapchat.com/add/enmarchefr" target="_blank" rel="noopener noreferrer">
-                                    <i class="fa fa-snapchat-ghost"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/enmarchefr" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/enmarchefr/" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.linkedin.com/company/en-marche" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-linkedin-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://medium.com/@enmarchefr" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-medium"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.youtube.com/channel/UCJw8np695wqWOaKVhFjkRyg" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-youtube-square"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://www.snapchat.com/add/enmarchefr" target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-snapchat-ghost"></i>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </nav>
-        </header>
-    {% endblock %}
+            </div>
+        </nav>
+    </header>
+{% endblock %}
 
-    {% block content '' %}
+{% block content '' %}
 
-    {% if not app.debug %}
+{% if not app.debug %}
     <amp-analytics config="https://www.googletagmanager.com/amp.json?id=GTM-TTW2FMQ&gtm.url=SOURCE_URL" data-credentials="include">
         <script type="application/json">
             {
@@ -142,8 +142,8 @@
             }
         </script>
     </amp-analytics>
-    {% endif %}
+{% endif %}
 
-    {{ include('non.li.html.twig') }}
+{{ include('non.li.html.twig') }}
 </body>
 </html>
