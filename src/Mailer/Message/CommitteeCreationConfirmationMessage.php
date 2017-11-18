@@ -9,15 +9,26 @@ class CommitteeCreationConfirmationMessage extends Message
 {
     public static function create(Adherent $adherent, string $city): self
     {
-        $message = new self(
+        return new self(
             Uuid::uuid4(),
             $adherent->getEmailAddress(),
-            $adherent->getFullName()
+            $adherent->getFullName(),
+            self::getTemplateVars($city),
+            self::getRecipientVars($adherent->getFirstName())
         );
+    }
 
-        $message->setVar('target_firstname', self::escape($adherent->getFirstName()));
-        $message->setVar('committee_city', $city);
+    private static function getTemplateVars(string $committeeCity): array
+    {
+        return [
+            'committee_city' => self::escape($committeeCity),
+        ];
+    }
 
-        return $message;
+    private static function getRecipientVars(string $firstName): array
+    {
+        return [
+            'target_firstname' => self::escape($firstName),
+        ];
     }
 }

@@ -4,7 +4,7 @@ namespace Tests\AppBundle\Mailer\Message;
 
 use AppBundle\Entity\EventRegistration;
 use AppBundle\Mailer\Message\CitizenInitiativeRegistrationConfirmationMessage;
-use Ramsey\Uuid\UuidInterface;
+use AppBundle\Mailer\Message\Message;
 
 class CitizenInitiativeRegistrationConfirmationMessageTest extends AbstractEventMessageTest
 {
@@ -25,26 +25,28 @@ class CitizenInitiativeRegistrationConfirmationMessageTest extends AbstractEvent
         $message = CitizenInitiativeRegistrationConfirmationMessage::createFromRegistration($registration, self::CITIZEN_INITIATIVE_LINK);
 
         $this->assertInstanceOf(CitizenInitiativeRegistrationConfirmationMessage::class, $message);
-        $this->assertInstanceOf(UuidInterface::class, $message->getUuid());
-        $this->assertSame('john@bar.com', $message->getRecipient(0)->getEmailAddress());
-        $this->assertSame('John', $message->getRecipient(0)->getFullName());
+        $this->assertInstanceOf(Message::class, $message);
+        $this->assertCount(4, $message->getVars());
         $this->assertSame(
             [
                 'IC_name' => 'Grand Meeting de Paris',
-                'IC_organiser_firstname' => 'Michelle',
-                'IC_organiser_lastname' => 'Doe',
+                'IC_organizer_firstname' => 'Michelle',
+                'IC_organizer_lastname' => 'Doe',
                 'IC_link' => self::CITIZEN_INITIATIVE_LINK,
             ],
             $message->getVars()
         );
+        $this->assertCount(1, $message->getRecipients());
 
         $recipient = $message->getRecipient(0);
 
+        $this->assertSame('john@bar.com', $recipient->getEmailAddress());
+        $this->assertSame('John', $recipient->getFullName());
         $this->assertSame(
             [
                 'IC_name' => 'Grand Meeting de Paris',
-                'IC_organiser_firstname' => 'Michelle',
-                'IC_organiser_lastname' => 'Doe',
+                'IC_organizer_firstname' => 'Michelle',
+                'IC_organizer_lastname' => 'Doe',
                 'IC_link' => self::CITIZEN_INITIATIVE_LINK,
                 'prenom' => 'John',
             ],

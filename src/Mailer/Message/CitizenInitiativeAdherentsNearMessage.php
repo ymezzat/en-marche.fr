@@ -15,7 +15,6 @@ final class CitizenInitiativeAdherentsNearMessage extends Message
      * @param Adherent          $organizer
      * @param CitizenInitiative $citizenInitiative
      * @param string            $citizenInitiativeLink
-     * @param \Closure          $recipientVarsGenerator
      *
      * @return CitizenInitiativeAdherentsNearMessage
      */
@@ -23,8 +22,7 @@ final class CitizenInitiativeAdherentsNearMessage extends Message
         array $recipients,
         Adherent $organizer,
         CitizenInitiative $citizenInitiative,
-        string $citizenInitiativeLink,
-        \Closure $recipientVarsGenerator
+        string $citizenInitiativeLink
     ): self {
         if (!$recipients) {
             throw new \InvalidArgumentException('At least one Adherent recipients is required.');
@@ -52,16 +50,20 @@ final class CitizenInitiativeAdherentsNearMessage extends Message
                 $citizenInitiative->getInlineFormattedAddress(),
                 $citizenInitiativeLink
             ),
-            $recipientVarsGenerator($recipient),
+            self::getRecipientVars($recipient->getFirstName()),
             $organizer->getEmailAddress()
         );
 
         /* @var Adherent[] $recipients */
         foreach ($recipients as $recipient) {
+            if (!$recipient instanceof Adherent) {
+                throw new \InvalidArgumentException('This message builder requires a collection of Adherent instances');
+            }
+
             $message->addRecipient(
                 $recipient->getEmailAddress(),
                 $recipient->getFullName(),
-                $recipientVarsGenerator($recipient)
+                self::getRecipientVars($recipient->getFirstName())
             );
         }
 
@@ -78,7 +80,6 @@ final class CitizenInitiativeAdherentsNearMessage extends Message
         string $citizenInitiativeLink
     ): array {
         return [
-            // Global common variables
             'IC_organizer_firstname' => self::escape($organizerFirstName),
             'IC_organizer_lastname' => self::escape($organizerLastName),
             'IC_name' => self::escape($citizenInitiativeName),
@@ -89,7 +90,7 @@ final class CitizenInitiativeAdherentsNearMessage extends Message
         ];
     }
 
-    public static function getRecipientVars(string $firstName): array
+    private static function getRecipientVars(string $firstName): array
     {
         return [
             'prenom' => self::escape($firstName),

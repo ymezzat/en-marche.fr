@@ -8,7 +8,7 @@ use Ramsey\Uuid\Uuid;
 
 final class CitizenInitiativeOrganizerValidationMessage extends Message
 {
-    public static function create(Adherent $recipient, CitizenInitiative $initiative, string $citizenInitiativeLink): self
+    public static function create(Adherent $recipient, CitizenInitiative $initiative): self
     {
         return new self(
             Uuid::uuid4(),
@@ -42,7 +42,7 @@ final class CitizenInitiativeOrganizerValidationMessage extends Message
         ];
     }
 
-    public static function getRecipientVars(string $firstName): array
+    private static function getRecipientVars(string $firstName): array
     {
         return [
             'prenom' => self::escape($firstName),

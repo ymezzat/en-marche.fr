@@ -2,9 +2,8 @@
 
 namespace Tests\AppBundle\Mailer\Message;
 
-use AppBundle\Entity\Adherent;
 use AppBundle\Mailer\Message\EventCancellationMessage;
-use AppBundle\Mailer\Message\EventNotificationMessage;
+use AppBundle\Mailer\Message\Message;
 use AppBundle\Mailer\Message\MessageRecipient;
 
 class EventCancellationMessageTest extends AbstractEventMessageTest
@@ -22,14 +21,11 @@ class EventCancellationMessageTest extends AbstractEventMessageTest
             $recipients,
             $recipients[0],
             $this->createEventMock('En Marche Lyon', '2017-02-01 15:30:00', '15 allées Paul Bocuse', '69006-69386'),
-            self::SEARCH_EVENTS_URL,
-            function (Adherent $adherent) {
-                return EventNotificationMessage::getRecipientVars($adherent->getFirstName());
-            }
+            self::SEARCH_EVENTS_URL
         );
 
         $this->assertInstanceOf(EventCancellationMessage::class, $message);
-        $this->assertCount(4, $message->getRecipients());
+        $this->assertInstanceOf(Message::class, $message);
         $this->assertCount(2, $message->getVars());
         $this->assertSame(
             [
@@ -38,6 +34,7 @@ class EventCancellationMessageTest extends AbstractEventMessageTest
             ],
             $message->getVars()
         );
+        $this->assertCount(4, $message->getRecipients());
 
         $recipient = $message->getRecipient(0);
         $this->assertInstanceOf(MessageRecipient::class, $recipient);

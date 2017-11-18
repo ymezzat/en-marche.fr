@@ -13,21 +13,35 @@ final class CitizenInitiativeInvitationMessage extends Message
         $message = new self(
             Uuid::uuid4(),
             $invite->getEmail(),
-            self::escape($invite->getFullName()),
-            [
-                'sender_firstname' => self::escape($invite->getFirstName()),
-                'sender_message' => self::escape($invite->getMessage()),
-                'event_name' => self::escape($initiative->getName()),
-                'event_slug' => $eventUrl,
-            ]
+            $invite->getFullName(),
+            self::getTemplateVars(
+                $invite->getFirstName(),
+                $invite->getMessage(),
+                $initiative->getName(),
+                $eventUrl
+            ),
+            [],
+            $invite->getEmail()
         );
-
-        $message->setReplyTo($invite->getEmail());
 
         foreach ($invite->getGuests() as $guest) {
             $message->addCC($guest);
         }
 
         return $message;
+    }
+
+    private static function getTemplateVars(
+        string $senderFirstName,
+        string $senderMessage,
+        string $eventName,
+        string $eventUrl
+    ): array {
+        return [
+            'sender_firstname' => self::escape($senderFirstName),
+            'sender_message' => self::escape($senderMessage),
+            'event_name' => self::escape($eventName),
+            'event_slug' => $eventUrl,
+        ];
     }
 }

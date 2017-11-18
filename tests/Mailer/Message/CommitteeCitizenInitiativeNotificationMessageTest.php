@@ -3,12 +3,12 @@
 namespace Tests\AppBundle\Mailer\Message;
 
 use AppBundle\Mailer\Message\CommitteeCitizenInitiativeNotificationMessage;
+use AppBundle\Mailer\Message\Message;
 use AppBundle\Mailer\Message\MessageRecipient;
 
 class CommitteeCitizenInitiativeNotificationMessageTest extends AbstractEventMessageTest
 {
     const SHOW_CITIZEN_INITIATIVE_URL = 'https://enmarche.dev/initiative-citoyenne/2017-08-18-apprenez-a-sauver-des-vies';
-    const ATTEND_CITIZEN_INITIATIVE_URL = 'https://enmarche.dev/initiative-citoyenne/2017-08-18-apprenez-a-sauver-des-vies/inscription';
 
     public function testCreateCommitteeCitizenInitiativeNotificationMessage()
     {
@@ -34,12 +34,11 @@ class CommitteeCitizenInitiativeNotificationMessageTest extends AbstractEventMes
                 'Cette initiative est superbe !',
                 $citizenInitiative
             ),
-            self::SHOW_CITIZEN_INITIATIVE_URL,
-            self::ATTEND_CITIZEN_INITIATIVE_URL
+            self::SHOW_CITIZEN_INITIATIVE_URL
         );
 
         $this->assertInstanceOf(CommitteeCitizenInitiativeNotificationMessage::class, $message);
-        $this->assertCount(4, $message->getRecipients());
+        $this->assertInstanceOf(Message::class, $message);
         $this->assertCount(7, $message->getVars());
         $this->assertSame(
             [
@@ -53,6 +52,7 @@ class CommitteeCitizenInitiativeNotificationMessageTest extends AbstractEventMes
             ],
             $message->getVars()
         );
+        $this->assertCount(4, $message->getRecipients());
 
         $recipient = $message->getRecipient(0);
         $this->assertInstanceOf(MessageRecipient::class, $recipient);

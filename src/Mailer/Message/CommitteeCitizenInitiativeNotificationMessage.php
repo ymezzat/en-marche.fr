@@ -16,11 +16,10 @@ final class CommitteeCitizenInitiativeNotificationMessage extends Message
      * @param Adherent[]        $recipients
      * @param CommitteeFeedItem $feedItem
      * @param string            $citizenInitiativeLink
-     * @param string            $attendLink
      *
      * @return self
      */
-    public static function create(array $recipients, CommitteeFeedItem $feedItem, string $citizenInitiativeLink, string $attendLink): self
+    public static function create(array $recipients, CommitteeFeedItem $feedItem, string $citizenInitiativeLink): self
     {
         if (!$recipients) {
             throw new \InvalidArgumentException('At least one Adherent recipients is required.');
@@ -64,10 +63,14 @@ final class CommitteeCitizenInitiativeNotificationMessage extends Message
         $message->setSenderName($sender);
 
         foreach ($recipients as $recipient) {
+            if (!$recipient instanceof Adherent) {
+                throw new \InvalidArgumentException('This message builder requires a collection of Adherent instances');
+            }
+
             $message->addRecipient(
                 $recipient->getEmailAddress(),
                 $recipient->getFullName(),
-                static::getRecipientVars($recipient->getFirstName())
+                self::getRecipientVars($recipient->getFirstName())
             );
         }
 
@@ -94,7 +97,7 @@ final class CommitteeCitizenInitiativeNotificationMessage extends Message
         ];
     }
 
-    public static function getRecipientVars(string $firstName): array
+    private static function getRecipientVars(string $firstName): array
     {
         return [
             'prenom' => self::escape($firstName),

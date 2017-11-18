@@ -3,23 +3,22 @@
 namespace Tests\AppBundle\Mailer\Message;
 
 use AppBundle\Mailer\Message\CitizenInitiativeOrganizerValidationMessage;
+use AppBundle\Mailer\Message\Message;
 use AppBundle\Mailer\Message\MessageRecipient;
 
 class CitizenInitiativeOrganizerValidationMessageTest extends AbstractEventMessageTest
 {
-    const SHOW_CITIZEN_INITIATIVE_URL = 'https://enmarche.dev/comites/59b1314d-dcfb-4a4c-83e1-212841d0bd0f/evenements/2017-01-31-en-marche-lyon';
-
-    public function testCreateCitizenInitiativeAdherentsNearMessage()
+    public function testCreate()
     {
         $adherent[] = $this->createAdherentMock('em@example.com', 'Émmanuel', 'Macron');
 
         $message = CitizenInitiativeOrganizerValidationMessage::create(
             $this->createAdherentMock('em@example.com', 'Émmanuel', 'Macron'),
-            $this->createCitizenInitiativeMock('En Marche Lyon', '2017-02-01 15:30:00', '15 allées Paul Bocuse', '69006-69386', 'en-marche-lyon'),
-            self::SHOW_CITIZEN_INITIATIVE_URL
+            $this->createCitizenInitiativeMock('En Marche Lyon', '2017-02-01 15:30:00', '15 allées Paul Bocuse', '69006-69386', 'en-marche-lyon')
         );
 
         $this->assertInstanceOf(CitizenInitiativeOrganizerValidationMessage::class, $message);
+        $this->assertInstanceOf(Message::class, $message);
         $this->assertCount(4, $message->getVars());
         $this->assertSame(
             [
@@ -30,6 +29,7 @@ class CitizenInitiativeOrganizerValidationMessageTest extends AbstractEventMessa
             ],
             $message->getVars()
         );
+        $this->assertCount(1, $message->getRecipients());
 
         $recipient = $message->getRecipient(0);
 

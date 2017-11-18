@@ -9,17 +9,22 @@ use Ramsey\Uuid\Uuid;
 
 final class ProcurationProxyCancelledMessage extends Message
 {
-    public static function create(ProcurationRequest $request, ProcurationProxy $proxy, ?Adherent $procurationManager): self
-    {
+    public static function create(
+        ProcurationRequest $request,
+        ProcurationProxy $proxy,
+        ?Adherent $procurationManager
+    ): self {
         $message = new self(
             Uuid::uuid4(),
             $request->getEmailAddress(),
             null,
-            [
-                'target_firstname' => self::escape($request->getFirstNames()),
-                'voter_first_name' => $proxy->getFirstNames(),
-                'voter_last_name' => $proxy->getLastName(),
-            ]
+            self::getTemplateVars(
+                $request->getFirstNames(),
+                $proxy->getFirstNames(),
+                $proxy->getLastName()
+            ),
+            [],
+            $procurationManager ? $procurationManager->getEmailAddress() : 'procurations@en-marche.fr'
         );
 
         $message->setSenderName('Procuration En Marche !');
@@ -27,11 +32,20 @@ final class ProcurationProxyCancelledMessage extends Message
 
         if ($procurationManager) {
             $message->addCC($procurationManager->getEmailAddress());
-            $message->setReplyTo($procurationManager->getEmailAddress());
-        } else {
-            $message->setReplyTo('procurations@en-marche.fr');
         }
 
         return $message;
+    }
+
+    private static function getTemplateVars(
+        string $targetFirstName,
+        string $voterFirstName,
+        string $voterLastName
+    ): array {
+        return [
+            'target_firstname' => self::escape($targetFirstName),
+            'voter_first_name' => $voterFirstName,
+            'voter_last_name' => $voterLastName,
+        ];
     }
 }

@@ -17,13 +17,13 @@ final class CitizenInitiativeRegistrationConfirmationMessage extends Message
             Uuid::uuid4(),
             $registration->getEmailAddress(),
             $firstName,
-            static::getTemplateVars(
+            self::getTemplateVars(
                 $event->getName(),
                 $organizer->getFirstName(),
                 $organizer->getLastName(),
                 $citizenInitiativeLink
             ),
-            static::getRecipientVars($firstName)
+            self::getRecipientVars($firstName)
         );
     }
 
@@ -35,8 +35,8 @@ final class CitizenInitiativeRegistrationConfirmationMessage extends Message
     ): array {
         return [
             'IC_name' => self::escape($initiativeName),
-            'IC_organiser_firstname' => self::escape($referentFirstName),
-            'IC_organiser_lastname' => self::escape($referentLastName),
+            'IC_organizer_firstname' => self::escape($referentFirstName),
+            'IC_organizer_lastname' => self::escape($referentLastName),
             'IC_link' => $citizenInitiativeLink,
         ];
     }

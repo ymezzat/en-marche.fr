@@ -14,14 +14,13 @@ final class CommitteeCitizenInitiativeOrganizerNotificationMessage extends Messa
             Uuid::uuid4(),
             $recipient->getEmailAddress(),
             $recipient->getFullName(),
-            static::getTemplateVars(
+            self::getTemplateVars(
                 $feedItem->getAuthor()->getFirstName(),
-                $feedItem->getAuthor()->getLastName(),
                 $contactLink,
                 $feedItem->getCommittee()->getName(),
                 $feedItem->getEvent()->getName()
             ),
-            static::getRecipientVars($recipient->getFirstName())
+            self::getRecipientVars($recipient->getFirstName())
         );
 
         return $message;
@@ -29,21 +28,19 @@ final class CommitteeCitizenInitiativeOrganizerNotificationMessage extends Messa
 
     private static function getTemplateVars(
         string $referentFirstName,
-        string $referentLastName,
         string $contactLink,
         string $committeeName,
         string $initiativeName
     ): array {
         return [
             'animator_firstname' => self::escape($referentFirstName),
-            'animator_lastname' => self::escape($referentLastName),
             'animator_contact_link' => $contactLink,
             'committee_name' => self::escape($committeeName),
             'IC_name' => $initiativeName,
         ];
     }
 
-    public static function getRecipientVars(string $firstName): array
+    private static function getRecipientVars(string $firstName): array
     {
         return [
             'prenom' => self::escape($firstName),

@@ -16,8 +16,8 @@ final class CitizenInitiativeCreationConfirmationMessage extends Message
             Uuid::uuid4(),
             $author->getEmailAddress(),
             $author->getFirstName(),
-            static::getTemplateVars($initiative->getName()),
-            static::getRecipientVars($author->getFirstName())
+            self::getTemplateVars($initiative->getName()),
+            self::getRecipientVars($author->getFirstName())
         );
     }
 

@@ -111,15 +111,12 @@ class CommitteeFeedManager
         $citizenInitiativeLink = $this->generateUrl('app_citizen_initiative_show', [
             'slug' => $initiative->getSlug(),
         ]);
-        $attendLink = $this->generateUrl('app_citizen_initiative_attend', [
-            'slug' => $initiative->getSlug(),
-        ]);
+
         foreach ($this->getOptinCommitteeFollowersChunks($message->getCommittee()) as $chunk) {
             $this->mailer->sendMessage(CommitteeCitizenInitiativeNotificationMessage::create(
                 $chunk,
                 $message,
-                $citizenInitiativeLink,
-                $attendLink
+                $citizenInitiativeLink
             ));
         }
     }

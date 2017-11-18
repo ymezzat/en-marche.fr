@@ -13,15 +13,14 @@ final class GroupApprovalConfirmationMessage extends Message
             Uuid::uuid4(),
             $administrator->getEmailAddress(),
             $administrator->getFullName(),
-            static::getTemplateVars($groupCityName, $groupUrl),
-            static::getRecipientVars($administrator->getFirstName())
+            self::getTemplateVars($groupCityName, $groupUrl),
+            self::getRecipientVars($administrator->getFirstName())
         );
     }
 
     private static function getTemplateVars(string $groupCityName, string $groupUrl): array
     {
         return [
-            'animator_firstname' => '',
             'group_city' => $groupCityName,
             'group_url' => $groupUrl,
         ];

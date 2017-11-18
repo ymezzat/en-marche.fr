@@ -521,6 +521,11 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
 
+        <!--
+        ######################################################
+        # Menu
+        ######################################################
+         -->
 
         <service id="app.admin.menu.email" class="AppBundle\Admin\EventListener\AdminEmailMenuListener">
             <argument type="service" id="doctrine.orm.entity_manager"/>

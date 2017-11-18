@@ -84,11 +84,7 @@ class EventMessageNotifier implements EventSubscriberInterface
             $followers,
             $host,
             $event,
-            $this->generateUrl('app_event_show', $params),
-            $this->generateUrl('app_event_attend', $params),
-            function (Adherent $adherent) {
-                return EventNotificationMessage::getRecipientVars($adherent->getFirstName());
-            }
+            $this->generateUrl('app_event_show', $params)
         );
     }
 
@@ -98,10 +94,7 @@ class EventMessageNotifier implements EventSubscriberInterface
             $registered,
             $host,
             $event,
-            $this->generateUrl('app_search_events'),
-            function (Adherent $adherent) {
-                return EventCancellationMessage::getRecipientVars($adherent->getFirstName());
-            }
+            $this->generateUrl('app_search_events')
         );
     }
 

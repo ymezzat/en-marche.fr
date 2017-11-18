@@ -94,7 +94,6 @@
 
         <service id="app.adherent_account_activation_handler" class="AppBundle\Membership\AdherentAccountActivationHandler">
             <argument type="service" id="app.adherent_manager"/>
-            <argument type="service" id="app.committee.manager"/>
             <argument type="service" id="app.mailer.transactional"/>
             <argument type="service" id="app.security.authentication_utils"/>
         </service>

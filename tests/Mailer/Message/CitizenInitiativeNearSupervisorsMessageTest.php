@@ -2,15 +2,15 @@
 
 namespace Tests\AppBundle\Mailer\Message;
 
-use AppBundle\Entity\Adherent;
 use AppBundle\Mailer\Message\CitizenInitiativeNearSupervisorsMessage;
+use AppBundle\Mailer\Message\Message;
 use AppBundle\Mailer\Message\MessageRecipient;
 
 class CitizenInitiativeNearSupervisorsMessageTest extends AbstractEventMessageTest
 {
     const SHOW_CITIZEN_INITIATIVE_URL = 'https://enmarche.dev/comites/59b1314d-dcfb-4a4c-83e1-212841d0bd0f/evenements/2017-01-31-en-marche-lyon';
 
-    public function testCreateCitizenInitiativeNearSupervisorsMessage()
+    public function testCreate()
     {
         $recipients[] = $this->createAdherentMock('em@example.com', 'Émmanuel', 'Macron');
         $recipients[] = $this->createAdherentMock('jb@example.com', 'Jean', 'Berenger');
@@ -21,14 +21,11 @@ class CitizenInitiativeNearSupervisorsMessageTest extends AbstractEventMessageTe
             $recipients,
             $recipients[0],
             $this->createCitizenInitiativeMock('Initiative citoyenne à Lyon', '2017-12-27 10:30:00', '15 allées Paul Bocuse', '69006-69386', self::SHOW_CITIZEN_INITIATIVE_URL),
-            self::SHOW_CITIZEN_INITIATIVE_URL,
-            function (Adherent $adherent) {
-                return CitizenInitiativeNearSupervisorsMessage::getRecipientVars($adherent->getFirstName());
-            }
+            self::SHOW_CITIZEN_INITIATIVE_URL
         );
 
         $this->assertInstanceOf(CitizenInitiativeNearSupervisorsMessage::class, $message);
-        $this->assertCount(4, $message->getRecipients());
+        $this->assertInstanceOf(Message::class, $message);
         $this->assertCount(7, $message->getVars());
         $this->assertSame(
             [
@@ -42,6 +39,7 @@ class CitizenInitiativeNearSupervisorsMessageTest extends AbstractEventMessageTe
             ],
             $message->getVars()
         );
+        $this->assertCount(4, $message->getRecipients());
 
         $recipient = $message->getRecipient(0);
         $this->assertInstanceOf(MessageRecipient::class, $recipient);

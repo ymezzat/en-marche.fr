@@ -27,11 +27,13 @@ class CitizenInitiativeInvitationHandler
     {
         $invite = EventInvite::create($initiative, $invitation);
 
-        $url = $this->urlGenerator->generateRemoteUrl('app_citizen_initiative_show', [
-            'slug' => $initiative->getSlug(),
-        ]);
-
-        $this->mailer->sendMessage(CitizenInitiativeInvitationMessage::createFromInvite($invite, $initiative, $url));
+        $this->mailer->sendMessage(CitizenInitiativeInvitationMessage::createFromInvite(
+            $invite,
+            $initiative,
+            $this->urlGenerator->generateRemoteUrl('app_citizen_initiative_show', [
+                'slug' => $initiative->getSlug(),
+            ])
+        ));
 
         $this->manager->persist($invite);
         $this->manager->flush();
