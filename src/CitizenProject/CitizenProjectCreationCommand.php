@@ -2,6 +2,7 @@
 
 namespace AppBundle\CitizenProject;
 
+use AppBundle\Address\NullableAddress;
 use AppBundle\Entity\Adherent;
 use AppBundle\Validator\UniqueCitizenProject as AssertUniqueCitizenProject;
 
@@ -18,6 +19,10 @@ class CitizenProjectCreationCommand extends CitizenProjectCommand
         $dto = new self();
         $dto->adherent = $adherent;
         $dto->phone = $adherent->getPhone();
+
+        if ($adherent->getPostAddress()) {
+            $dto->address = NullableAddress::createFromAddress($adherent->getPostAddress());
+        }
 
         return $dto;
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Controller\EnMarche;
+namespace AppBundle\Controller\EnMarche\Coordinator;
 
 use AppBundle\Entity\Committee;
 use AppBundle\Exception\BaseGroupException;
-use AppBundle\Committee\Filter\CommitteeFilters;
-use AppBundle\Form\CoordinatorCommitteeType;
+use AppBundle\Coordinator\Filter\CommitteeFilter;
+use AppBundle\Form\CoordinatorAreaType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -15,19 +15,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * @Route("/espace-coordinateur")
- * @Security("is_granted('ROLE_COORDINATOR')")
+ * @Route("/espace-coordinateur/comites")
+ * @Security("has_role('ROLE_COORDINATOR_COMMITTEE')")
  */
-class CoordinatorController extends Controller
+class CoordinatorCommitteeController extends Controller
 {
     /**
-     * @Route("/comites", name="app_coordinator_committees")
+     * @Route("/list", name="app_coordinator_committees")
      * @Method("GET")
      */
     public function committeesAction(Request $request): Response
     {
         try {
-            $filters = CommitteeFilters::fromQueryString($request);
+            $filters = CommitteeFilter::fromQueryString($request);
         } catch (\UnexpectedValueException $e) {
             throw new BadRequestHttpException('Unexpected committee request status in the query string.', $e);
         }
@@ -36,7 +36,8 @@ class CoordinatorController extends Controller
 
         $forms = [];
         foreach ($committees as $committee) {
-            $form = $this->createForm(CoordinatorCommitteeType::class, $committee, [
+            $form = $this->createForm(CoordinatorAreaType::class, $committee, [
+                'data_class' => Committee::class,
                 'action' => $this->generateUrl('app_coordinator_committee_validate', [
                     'uuid' => $committee->getUuid(),
                     'slug' => $committee->getSlug(),
@@ -60,19 +61,21 @@ class CoordinatorController extends Controller
      */
     public function validateAction(Request $request, Committee $committee): Response
     {
-        $form = $this->createForm(CoordinatorCommitteeType::class, $committee);
+        $form = $this->createForm(CoordinatorAreaType::class, $committee, [
+            'data_class' => Committee::class,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 if ($form->get('refuse')->isClicked()) {
                     $this->get('app.committee.authority')->preRefuse($committee);
-                    $this->addFlash('info', sprintf('Merci. Votre appréciation a été transmise à nos équipes.', $committee->getName()));
+                    $this->addFlash('info', 'Merci. Votre appréciation a été transmise à nos équipes.');
                 }
 
                 if ($form->get('accept')->isClicked()) {
                     $this->get('app.committee.authority')->preApprove($committee);
-                    $this->addFlash('info', sprintf('Merci. Votre appréciation a été transmise à nos équipes.', $committee->getName()));
+                    $this->addFlash('info', 'Merci. Votre appréciation a été transmise à nos équipes.');
                 }
             } catch (BaseGroupException $exception) {
                 throw $this->createNotFoundException(sprintf('Committee %u has already been treated by an administrator.', $committee->getId()), $exception);

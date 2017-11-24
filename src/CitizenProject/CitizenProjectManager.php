@@ -3,13 +3,12 @@
 namespace AppBundle\CitizenProject;
 
 use AppBundle\Collection\CitizenProjectMembershipCollection;
+use AppBundle\Coordinator\Filter\CitizenProjectFilter;
 use AppBundle\Entity\Adherent;
 use AppBundle\Collection\AdherentCollection;
 use AppBundle\Entity\CitizenProject;
-use AppBundle\Entity\CitizenProjectFeedItem;
 use AppBundle\Entity\CitizenProjectMembership;
 use AppBundle\Repository\AdherentRepository;
-use AppBundle\Repository\CitizenProjectFeedItemRepository;
 use AppBundle\Repository\CitizenProjectMembershipRepository;
 use AppBundle\Repository\CitizenProjectRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -72,6 +71,19 @@ class CitizenProjectManager
     public function getAdherentCitizenProjectsAdministrator(Adherent $adherent): array
     {
         return $this->doGetAdherentCitizenProjects($adherent, true);
+    }
+
+    public function getCoordinatorCitizenProjects(Adherent $coordinator, CitizenProjectFilter $filter): array
+    {
+        $projects = $this->getCitizenProjectRepository()->findManagedByCoordinator($coordinator, $filter);
+
+        array_walk($projects, function (CitizenProject $project) {
+            if ($project->getCreatedBy()) {
+                $project->setCreator($this->getAdherentRepository()->findByUuid($project->getCreatedBy()));
+            }
+        });
+
+        return $projects;
     }
 
     private function doGetAdherentCitizenProjects(Adherent $adherent, $onlyAdministrator = false): array
@@ -208,6 +220,32 @@ class CitizenProjectManager
         }
     }
 
+    /**
+     * @param CitizenProject $citizenProject
+     * @param bool           $flush
+     */
+    public function preRefuseCitizenProject(CitizenProject $citizenProject, bool $flush = true): void
+    {
+        $citizenProject->preRefused();
+
+        if ($flush) {
+            $this->getManager()->flush();
+        }
+    }
+
+    /**
+     * @param CitizenProject $project
+     * @param bool           $flush
+     */
+    public function preApproveCitizenProject(CitizenProject $project, bool $flush = true): void
+    {
+        $project->preApproved();
+
+        if ($flush) {
+            $this->getManager()->flush();
+        }
+    }
+
     public function isFollowingCitizenProject(Adherent $adherent, CitizenProject $citizenProject): bool
     {
         return $this->getCitizenProjectMembership($adherent, $citizenProject) instanceof CitizenProjectMembership;
@@ -287,11 +325,6 @@ class CitizenProjectManager
     private function getCitizenProjectRepository(): CitizenProjectRepository
     {
         return $this->registry->getRepository(CitizenProject::class);
-    }
-
-    private function getCitizenProjectFeedItemRepository(): CitizenProjectFeedItemRepository
-    {
-        return $this->registry->getRepository(CitizenProjectFeedItem::class);
     }
 
     private function getCitizenProjectMembershipRepository(): CitizenProjectMembershipRepository

@@ -24,6 +24,7 @@ class CitizenProjectCommandTest extends TestCase
         $citizenProjectCategory = $this->createMock(CitizenProjectCategory::class);
         $committee = $this->createMock(Committee::class);
         $assistanceNeeded = false;
+        $assistanceContent = null;
         $problemDescription = 'Problem description';
         $proposedSolution = 'Proposed solution';
         $requiredMeans = 'Required means';
@@ -36,6 +37,7 @@ class CitizenProjectCommandTest extends TestCase
             $citizenProjectCategory,
             $committee,
             $assistanceNeeded,
+            $assistanceContent,
             $problemDescription,
             $proposedSolution,
             $requiredMeans,

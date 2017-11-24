@@ -28,9 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @Algolia\Index(autoIndex=false)
  */
-class CitizenProject extends BaseGroup
+class CitizenProject extends BaseGroup implements CoordinatorAreaInterface
 {
     use EntityNullablePostAddressTrait;
+    use CoordinatorAreaTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CitizenProjectCategory")
@@ -120,6 +121,7 @@ class CitizenProject extends BaseGroup
         CitizenProjectCategory $category,
         ?Committee $committee,
         bool $assistanceNeeded = false,
+        string $assistanceContent = null,
         string $problemDescription = '',
         string $proposedSolution = '',
         string $requiredMeans = '',
@@ -149,6 +151,7 @@ class CitizenProject extends BaseGroup
         $this->postAddress = $address;
         $this->phone = $phone;
         $this->assistanceNeeded = $assistanceNeeded;
+        $this->assistanceContent = $assistanceContent;
         $this->status = $status;
         $this->membersCounts = $membersCount;
         $this->approvedAt = $approvedAt;
@@ -271,7 +274,8 @@ class CitizenProject extends BaseGroup
         string $subtitle,
         CitizenProjectCategory $category,
         PhoneNumber $phone,
-        string $assistanceNeeded,
+        bool $assistanceNeeded,
+        ?string $assistanceContent,
         string $problemDescription,
         string $proposedSolution,
         string $requiredMeans,
@@ -287,6 +291,7 @@ class CitizenProject extends BaseGroup
             $category,
             $committee,
             $assistanceNeeded,
+            $assistanceContent,
             $problemDescription,
             $proposedSolution,
             $requiredMeans,

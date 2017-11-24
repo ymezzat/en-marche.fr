@@ -54,6 +54,10 @@
 
         <service id="AppBundle\Twig\MarkdownExtension" />
 
+        <service id="AppBundle\Twig\ReadMoreExtension">
+            <tag name="twig.runtime" />
+        </service>
+
         <service id="AppBundle\Twig\MarkdownRuntime">
             <argument type="service" id="League\CommonMark\CommonMarkConverter" />
             <tag name="twig.runtime" />

@@ -7,7 +7,9 @@ use AppBundle\Entity\BoardMember\BoardMember;
 use AppBundle\Entity\BoardMember\Role;
 use AppBundle\Entity\CommitteeMembership;
 use AppBundle\Form\ActivityPositionType;
+use AppBundle\Form\Admin\CoordinatorManagedAreaType;
 use AppBundle\Form\EventListener\BoardMemberListener;
+use AppBundle\Form\EventListener\CoordinatorManagedAreaListener;
 use AppBundle\Form\GenderType;
 use AppBundle\Intl\UnitedNationsBundle;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
@@ -15,6 +17,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Form\Type\DateRangePickerType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -217,11 +220,15 @@ class AdherentAdmin extends AbstractAdmin
                 ])
             ->end()
             ->with('Coordinateur', ['class' => 'col-md-3'])
-                ->add('coordinatorManagedAreaCodesAsString', TextType::class, [
-                    'label' => 'Codes des zones gérés',
+                ->add('coordinatorManagedAreas', CollectionType::class, [
+                    'label' => false,
                     'required' => false,
                     'help' => 'Laisser vide si l\'adhérent n\'est pas coordinateur. '.
                         'Utiliser les codes de pays (FR, DE, ...) ou des préfixes de codes postaux.',
+                    'entry_type' => CoordinatorManagedAreaType::class,
+                    'allow_add' => false,
+                    'allow_delete' => false,
+                    'by_reference' => false,
                 ])
             ->end()
             ->with('Responsable procuration', ['class' => 'col-md-3'])
@@ -258,7 +265,9 @@ class AdherentAdmin extends AbstractAdmin
             ->end()
         ;
 
-        $formMapper->getFormBuilder()->addEventSubscriber(new BoardMemberListener());
+        $formMapper->getFormBuilder()
+            ->addEventSubscriber(new BoardMemberListener())
+            ->addEventSubscriber(new CoordinatorManagedAreaListener());
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

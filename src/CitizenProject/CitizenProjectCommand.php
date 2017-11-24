@@ -94,6 +94,8 @@ class CitizenProjectCommand
         $dto->problemDescription = $citizenProject->getProblemDescription();
         $dto->proposedSolution = $citizenProject->getProposedSolution();
         $dto->requiredMeans = $citizenProject->getRequiredMeans();
+        $dto->assistanceNeeded = $citizenProject->isAssistanceNeeded();
+        $dto->assistanceContent = $citizenProject->getAssistanceContent();
         $dto->citizenProject = $citizenProject;
 
         return $dto;
