@@ -315,4 +315,14 @@ class CommitteeRepository extends EntityRepository
             return $uuid->toString();
         }, array_column($query->getArrayResult(), 'uuid'));
     }
+
+    public function findByPartialName(string $search, int $limit = 10): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.canonicalName LIKE :search')
+            ->setParameter('search', '%'.strtolower($search).'%')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

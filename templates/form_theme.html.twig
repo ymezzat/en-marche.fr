@@ -102,3 +102,13 @@
         </div>
     {% endspaceless %}
 {% endblock %}
+
+{% block _citizen_project_committeeSupports_entry_row %}
+    {% spaceless %}
+        <div class="summary-committee">
+            <span class="committee-remove">X</span>
+            <span class="committee-value">&nbsp;{% if value is not empty %}{{ value }}{% endif %}</span>
+            {{ block('hidden_widget') }}
+        </div>
+    {% endspaceless %}
+{% endblock %}

@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Algolia\AlgoliaSearchBundle\Mapping\Annotation as Algolia;
 use AppBundle\Exception\CitizenProjectAlreadyApprovedException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use libphonenumber\PhoneNumber;
 use Ramsey\Uuid\UuidInterface;
@@ -91,11 +93,13 @@ class CitizenProject extends BaseGroup
     private $assistanceContent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Committee")
+     * @var CitizenProjectCommitteeSupport[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CitizenProjectCommitteeSupport", mappedBy="citizenProject")
      *
      * @Algolia\Attribute
      */
-    private $committee;
+    private $committeeSupports;
 
     /**
      * @var UploadedFile|null
@@ -118,7 +122,7 @@ class CitizenProject extends BaseGroup
         string $name,
         string $subtitle,
         CitizenProjectCategory $category,
-        ?Committee $committee,
+        ?array $committees,
         bool $assistanceNeeded = false,
         string $problemDescription = '',
         string $proposedSolution = '',
@@ -141,7 +145,6 @@ class CitizenProject extends BaseGroup
 
         $this->uuid = $uuid;
         $this->createdBy = $creator;
-        $this->committee = $committee;
         $this->setName($name);
         $this->slug = $slug;
         $this->category = $category;
@@ -157,6 +160,12 @@ class CitizenProject extends BaseGroup
         $this->problemDescription = $problemDescription;
         $this->proposedSolution = $proposedSolution;
         $this->requiredMeans = $requiredMeans;
+        $this->committeeSupports = new ArrayCollection();
+
+        foreach ($committees as $committee) {
+            $this->addCommitteeOnSupport($committee);
+        }
+
     }
 
     public function getPostAddress(): NullablePostAddress
@@ -194,9 +203,43 @@ class CitizenProject extends BaseGroup
         return $this->phone;
     }
 
-    public function getCommittee(): ?Committee
+    public function getCommitteeSupports(): Collection
     {
-        return $this->committee;
+        return $this->committeeSupports;
+    }
+
+    public function setCommitteeSupports(Collection $committeeSupports): void
+    {
+        $this->committeeSupports = $committeeSupports;
+    }
+
+    public function setCommitteesOnSupport(iterable $committees): void
+    {
+        foreach ($committees as $committee) {
+            $this->addCommitteeOnSupport($committee);
+        }
+    }
+
+    public function addCommitteeOnSupport(Committee $committee): void
+    {
+        foreach ($this->committeeSupports as $committeeSupport) {
+            if ($committee === $committeeSupport->getCommittee()) {
+                return;
+            }
+        }
+
+        $this->committeeSupports->add(new CitizenProjectCommitteeSupport($this, $committee));
+    }
+
+    public function removeCommitteeSupport(Committee $committee): void
+    {
+        foreach($this->committeeSupports as $committeeSupport) {
+            if ($committee === $committeeSupport->getCommittee()) {
+                $this->committeeSupports->removeElement($committeeSupport);
+
+                return;
+            }
+        }
     }
 
     public function setSubtitle(string $subtitle)
@@ -275,7 +318,7 @@ class CitizenProject extends BaseGroup
         string $problemDescription,
         string $proposedSolution,
         string $requiredMeans,
-        Committee $committee = null,
+        ?array $committees = null,
         NullablePostAddress $address = null,
         string $createdAt = 'now'
     ): self {
@@ -285,7 +328,7 @@ class CitizenProject extends BaseGroup
             $name,
             $subtitle,
             $category,
-            $committee,
+            $committees,
             $assistanceNeeded,
             $problemDescription,
             $proposedSolution,

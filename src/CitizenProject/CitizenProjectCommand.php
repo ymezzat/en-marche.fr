@@ -7,6 +7,8 @@ use AppBundle\Entity\CitizenProject;
 use AppBundle\Entity\CitizenProjectCategory;
 use AppBundle\Entity\Committee;
 use AppBundle\Validator\UniqueCitizenProject as AssertUniqueCitizenProject;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use libphonenumber\PhoneNumber;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Ramsey\Uuid\UuidInterface;
@@ -50,7 +52,7 @@ class CitizenProjectCommand
 
     public $category;
 
-    private $committee;
+    private $committeeSupports;
 
     public $assistanceNeeded = false;
 
@@ -80,6 +82,7 @@ class CitizenProjectCommand
     public function __construct(NullableAddress $address = null)
     {
         $this->address = $address;
+        $this->committeeSupports = new ArrayCollection();
     }
 
     public static function createFromCitizenProject(CitizenProject $citizenProject): self
@@ -90,7 +93,7 @@ class CitizenProjectCommand
         $dto->subtitle = $citizenProject->getSubtitle();
         $dto->category = $citizenProject->getCategory();
         $dto->phone = $citizenProject->getPhone();
-        $dto->committee = $citizenProject->getCommittee();
+        $dto->committeeSupports = $citizenProject->getCommitteeSupports();
         $dto->problemDescription = $citizenProject->getProblemDescription();
         $dto->proposedSolution = $citizenProject->getProposedSolution();
         $dto->requiredMeans = $citizenProject->getRequiredMeans();
@@ -144,9 +147,14 @@ class CitizenProjectCommand
         return $this->category;
     }
 
-    public function getCommittee(): ?Committee
+    public function getCommitteeSupports(): Collection
     {
-        return $this->committee;
+        return $this->committeeSupports;
+    }
+
+    public function setCommitteeSupports(Collection $committeeSupports): void
+    {
+        $this->committeeSupports = $committeeSupports;
     }
 
     public function getSubtitle(): ?string
@@ -177,5 +185,12 @@ class CitizenProjectCommand
     public function setCitizenProject(CitizenProject $citizenProject): void
     {
         $this->citizenProject = $citizenProject;
+    }
+
+    public function addCommittee(Committee $committee): void
+    {
+        if (!$this->committeeSupports->contains($committee)) {
+            $this->committeeSupports->add($committee);
+        }
     }
 }

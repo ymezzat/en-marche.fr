@@ -39,7 +39,7 @@ class CitizenProjectFactory
             $data['name'],
             $data['subtitle'],
             $data['category'],
-            $data['committee'] ?? null,
+            $data['committee'] ?? [],
             $data['assistance_needed'] ?? false,
             $data['problem_description'],
             $data['proposed_solution'],
@@ -72,7 +72,7 @@ class CitizenProjectFactory
             $command->problemDescription,
             $command->proposedSolution,
             $command->requiredMeans,
-            $command->getCommittee(),
+            $command->getCommitteeSupports()->toArray(),
             $command->getAddress() ? $this->addressFactory->createFromNullableAddress($command->getAddress()) : null
         );
 
