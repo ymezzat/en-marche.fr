@@ -6,9 +6,6 @@ use AppBundle\Coordinator\CoordinatorAreaSectors;
 use AppBundle\Entity\Committee;
 use AppBundle\Entity\CoordinatorManagedArea;
 
-/**
- * @author Dimitri Gritsajuk <dimitri.gritsajuk@sensiolabs.com>
- */
 class CommitteeFilter extends AbstractCoordinatorAreaFilter
 {
     protected function getAvailableStatus(): array

@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * @author Dimitri Gritsajuk <dimitri.gritsajuk@sensiolabs.com>
- *
  * @Route("/espace-coordinateur/projet-citoyen")
  * @Security("has_role('ROLE_COORDINATOR_CITIZEN_PROJECT')")
  */

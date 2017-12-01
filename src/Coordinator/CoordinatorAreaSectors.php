@@ -2,9 +2,6 @@
 
 namespace AppBundle\Coordinator;
 
-/**
- * @author Dimitri Gritsajuk <dimitri.gritsajuk@sensiolabs.com>
- */
 final class CoordinatorAreaSectors
 {
     public const COMMITTEE_SECTOR = 'committee_sector';

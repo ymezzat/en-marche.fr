@@ -10,9 +10,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-/**
- * @author Dimitri Gritsajuk <dimitri.gritsajuk@sensiolabs.com>
- */
 class CoordinatorManagedAreaListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array

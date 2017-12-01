@@ -2,9 +2,6 @@
 
 namespace AppBundle\Entity;
 
-/**
- * @author Dimitri Gritsajuk <dimitri.gritsajuk@sensiolabs.com>
- */
 interface CoordinatorAreaInterface
 {
     public const PRE_APPROVED = 'PRE_APPROVED';

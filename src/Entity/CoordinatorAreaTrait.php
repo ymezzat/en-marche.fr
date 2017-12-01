@@ -5,9 +5,6 @@ namespace AppBundle\Entity;
 use AppBundle\Exception\CoordinatorAreaAlreadyTreatedException;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @author Dimitri Gritsajuk <dimitri.gritsajuk@sensiolabs.com>
- */
 trait CoordinatorAreaTrait
 {
     /**

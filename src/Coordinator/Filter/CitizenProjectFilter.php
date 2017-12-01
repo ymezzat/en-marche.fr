@@ -6,9 +6,6 @@ use AppBundle\Coordinator\CoordinatorAreaSectors;
 use AppBundle\Entity\CitizenProject;
 use AppBundle\Entity\CoordinatorManagedArea;
 
-/**
- * @author Dimitri Gritsajuk <dimitri.gritsajuk@sensiolabs.com>
- */
 class CitizenProjectFilter extends AbstractCoordinatorAreaFilter
 {
     protected function getAvailableStatus(): array
